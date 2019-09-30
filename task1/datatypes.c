@@ -6,6 +6,7 @@ int main()
 	/* Start of your code */
 
 	int i;
+	int *j;
 	char c;
 	short s;
 	long l;
@@ -27,15 +28,15 @@ int main()
 	/* End of your code */ 
 
 
-	float x = 0.5;
-	float y = 0.5;
-	float z = 0.5;
+	float x = 0.3;
+	float y = 0.3;
+	float z = 0.3;
 
 	float a = x + y + z;
 
-	printf("%.10f == 1.5?",a);
+	printf("%.10f == 0.9?",a);
 
-	if(a == 1.5) printf("True");
+	if(a == 0.9) printf("True");
 	else
 		printf("False");
 
