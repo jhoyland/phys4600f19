@@ -1,34 +1,33 @@
+#The name of the program we are going to build
+TARGET	  = program
 
-# Compiler and linker options
-CC        = gcc
-CFLAGS    = -c -v
+#
+CC		= gcc
+CFLAGS	= -c
+LFLAGS	= 
 
-# User directories to search
+#Specify build, include and source directories
 BUILDDIR  = ./build
 INCDIR    = ./include
 SRCDIR    = ./src
 
-# List sources, object files and libraries to be used
-SOURCES   = $(wildcard $(SRCDIR)/*.c )
+#Create a list of all the .c files in the source directory
+SOURCES   = $(wildcard $(SRCDIR)/*.c)
+#Make another list by replacing all the .c's from the sources list with .o's and change the directory to build
 OBJECTS   = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
-LIBRARIES = wiringPi wiringPiDev pthread 
+#A list of all libraries to be used
+LIBRARIES = m
 
-# Create command line arguments
+#The gcc option to link an external libary is -l so prefix -l to each library in the list
 LIBCMD    = $(addprefix -l,$(LIBRARIES))
-LIBDIRCMD = $(addprefix -L,$(LIBDIR))
-INCCMD    = $(addprefix -I,$(INCDIR) $(LIBINCDIR)) 
 
-# The final executable name
-TARGET    = executable
-
-# The rules
-
-all: $(SOURCES) $(TARGET)
-    
+#Build each object file from its associated .c source file
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $(INCCMD) $< -o $@
+	$(CC) $(CFLAGS) -I $(INCDIR) -o $@ $<
 
-$(TARGET): $(OBJECTS) 
-	$(CC) $(LDFLAGS) $(OBJECTS) $(LIBDIRCMD) $(LIBCMD) -o $@
+#Link together the object files and libraries to create the final exectuable
+$(TARGET): $(OBJECTS)
+	$(CC) $(LFLAGS) $(LIBCMD) -o $@ $^
+
 
 
