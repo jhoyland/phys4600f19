@@ -1,4 +1,4 @@
-#include "statistics.h"
+#include <statistics.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -52,7 +52,7 @@ double stdevf(double* data, int n, double* meanout)
 		acc += term*term;		// This is usually faster than calling math function pow for powers of 2
 	}
 
-	if(meanout != NULL) *meanout = dmean;
+	if(meanout != NULL) meanout = dmean;
 
 	return sqrt(acc / (n-1));
 }
@@ -60,6 +60,7 @@ double stdevf(double* data, int n, double* meanout)
 int load_data_columns(FILE* fp, double* xdata, double* ydata, int max_n)
 {
 	int n = 0;
+	
 	while(fscanf(fp,"%lf %lf",xdata, ydata) != EOF && n < max_n)
 	{
 
@@ -67,6 +68,19 @@ int load_data_columns(FILE* fp, double* xdata, double* ydata, int max_n)
 		ydata++;
 		n++;
 	}
+
+	/*
+Alternate:
+	while(!feof(fp) && n < max_n)
+	{
+		fscanf(fp,"%lf %lf",xdata, ydata);
+		xdata++;
+		ydata++;
+		n++;
+	}
+
+
+	*/
 
 	return n;
 }

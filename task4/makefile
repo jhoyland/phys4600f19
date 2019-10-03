@@ -1,14 +1,33 @@
-#This is a comment
+#The name of the program we are going to build
+TARGET	  = program
 
-OBJ=main.o statistics.o
+#
+CC		= gcc
+CFLAGS	= -c
+LFLAGS	= 
 
-TARGET=program
+#Specify build, include and source directories
+BUILDDIR  = ./build
+INCDIR    = ./include
+SRCDIR    = ./src
 
-#This compiles each c file into an object file
-%.o: %.c
-	gcc -c -o $@ $<
+#Create a list of all the .c files in the source directory
+SOURCES   = $(wildcard $(SRCDIR)/*.c)
+#Make another list by replacing all the .c's from the sources list with .o's and change the directory to build
+OBJECTS   = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
+#A list of all libraries to be used
+#LIBRARIES = m
 
-#This links the objects into an exectuable
-# -o means : "output file name"
-$(TARGET): $(OBJ)
-	gcc -o $@ $^ 
+#The gcc option to link an external libary is -l so prefix -l to each library in the list
+LIBCMD    = $(addprefix -l,$(LIBRARIES))
+
+#Build each object file from its associated .c source file
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -I $(INCDIR) -o $@ $<
+
+#Link together the object files and libraries to create the final exectuable
+$(TARGET): $(OBJECTS)
+	$(CC) $(LFLAGS) $(LIBCMD) -o $@ $^
+
+
+
