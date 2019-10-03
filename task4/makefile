@@ -27,7 +27,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 
 #Link together the object files and libraries to create the final exectuable
 $(TARGET): $(OBJECTS)
-	$(CC) $(LFLAGS) $(LIBCMD) -o $@ $^
+	$(CC) $(LFLAGS) -o $@ $^ $(LIBCMD) 
 
 
 

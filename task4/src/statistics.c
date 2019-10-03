@@ -52,7 +52,7 @@ double stdevf(double* data, int n, double* meanout)
 		acc += term*term;		// This is usually faster than calling math function pow for powers of 2
 	}
 
-	if(meanout != NULL) meanout = dmean;
+	if(meanout != NULL) *meanout = dmean;
 
 	return sqrt(acc / (n-1));
 }
