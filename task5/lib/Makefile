@@ -20,14 +20,16 @@ LIBRARIES = m
 
 #The gcc option to link an external libary is -l so prefix -l to each library in the list
 LIBCMD    = $(addprefix -l,$(LIBRARIES))
+INCCMD	  = $(addprefix, -I, $(INCDIR))
 
 #Build each object file from its associated .c source file
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -I $(INCDIR) -o $@ $<
+	$(CC) $(CFLAGS) $(INCCMD) -o $@ $<
 
 #Link together the object files and libraries to create the final exectuable
 $(TARGET): $(OBJECTS)
-	$(CC) $(LFLAGS) -o $@ $^ $(LIBCMD)
+	ar rcs $(TARGET).a $^
+
 
 
 
