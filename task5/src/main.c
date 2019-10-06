@@ -1,48 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>	
-#include <statistics.h>
+#include <visa.h>
 
 void main(int argc, char** argv)
 {
-	if(argc < 2) 
+	char inq[] = "*IDN?/n";
+	ViStatus status = VI_SUCCESS;
+	ViFindList resourceList;
+	ViUInt32 num_inst;
+
+	ViSession defaultRM, scopeHandle;
+	ViChar description[VI_FIND_BUFLEN];
+
+	status = viOpenDefaultRM(&defaultRM);
+
+	if(status == VI_SUCCESS)
 	{
-		printf("\nNo data file given");
-		exit(1);
-	}
-
-	FILE* fp;
-	int ndata = MAX_N_DATA;
-
-	double xdata[ndata];
-	double ydata[ndata];
-
-	double mean;
-	double sdev;
-
-	fp = fopen(argv[1],"r");
-
-	if(fp != NULL)
-	{
-		ndata = load_data_columns(fp,xdata,ydata,ndata);
-
-		if(ndata)
+		status = viFindRsrc(defaultRM,"USB[0-9]::*INSTR",
+						&resourceList,&num_inst,description);
+		if(status == VI_SUCCESS)
 		{
-			sdev = stdevf(ydata,ndata,&mean);
+			status = viOpen(defaultRM,description,
+							VI_NULL,VI_NULL,&scopeHandle);
 
-			printf("\nFor data file %s\nMean of %d data items = %lf\nStandard deviation= %lf\n\n",argv[1],ndata,mean,sdev);
-
+			if(status == VI_SUCCESS)
+			{
+				printf("Opened %s",description);
+			}
+			else
+			{
+				printf("Failed to open %s",description);
+			}
 		}
 		else
 		{
-			printf("data read failed");
+			printf("Couldn't find any instruments");
 		}
 	}
 	else
-	{
-		printf("couldn't open file");
-
-	}
-
-
+		printf("Failed to open defaultRM");
 }
