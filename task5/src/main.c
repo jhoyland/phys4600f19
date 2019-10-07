@@ -17,7 +17,7 @@ void main(int argc, char** argv)
 
 	if(status == VI_SUCCESS)
 	{
-		status = viFindRsrc(defaultRM,"USB[0-9]::*INSTR",
+		status = viFindRsrc(defaultRM,"USB[0-9]::0?*INSTR",
 						&resourceList,&num_inst,description);
 		if(status == VI_SUCCESS)
 		{
