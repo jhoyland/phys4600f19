@@ -1,25 +1,23 @@
-MCU=attiny88
-AVRDUDEMCU=t88
+MCU=atmega328p
+AVRDUDEMCU=m328p
 #Needed for windows compile
-#TOOLCHAIN=/c/'Program Files (x86)'/Atmel/Studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/
-TOOLCHAIN=
+TOOLCHAIN=/c/'Program Files (x86)'/Atmel/Studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/
+#TOOLCHAIN=
 CC=$(TOOLCHAIN)avr-gcc
 THIS_ADDRESS=0x1010
 DEFINES=-DF_CPU=1000000UL -DMY_ADDRESS=$(THIS_ADDRESS)
 CFLAGS=-g $(DEFINES) -Os -Wall -mcall-prologues -mmcu=$(MCU)
 OBJ2HEX=$(TOOLCHAIN)avr-objcopy
 AVRDUDE=avrdude
-#PORT=COM4
-PORT=/dev/ttyACM0
+#Change this to your programmer COM port
+PORT=COM4
+#PORT=/dev/ttyACM0
 PROGRAMMER=stk500v2
 
 # User directories to search
 BUILDDIR  = ./build
 INCDIR    = ./include
 SRCDIR    = ./src
-
-COMMONINCDIR = ~/dev/include
-COMMONSRCDIR = ~/dev/src
 
 # 3rd Party library directories to search
 LIBDIR    = 
@@ -28,8 +26,6 @@ LIBINCDIR =
 # List sources, object files and libraries to be used
 SOURCES   = $(wildcard $(SRCDIR)/*.c)
 OBJECTS   = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
-COMMONSOURCES =  $(wildcard $(COMMONSRCDIR)/*.c)
-COMMONOBJECTS =  $(patsubst $(COMMONSRCDIR)/%.c, $(BUILDDIR)/%.o, $(COMMONSOURCES))
 LIBRARIES = 
 
 # Create command line arguments
@@ -44,21 +40,18 @@ all: $(TARGET).hex
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $(INCCMD) $< -o $@
-
-$(BUILDDIR)/%.o: $(COMMONSRCDIR)/%.c
-	$(CC) -c $(CFLAGS) $(INCCMD) $< -o $@
 	
-$(TARGET).elf: $(OBJECTS) $(COMMONOBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) $(COMMONOBJECTS) -o $(TARGET).elf
+$(TARGET).elf: $(OBJECTS) 
+	$(CC) $(CFLAGS) $(OBJECTS)  -o $(TARGET).elf
 	
 $(TARGET).hex: $(TARGET).elf	 	
 	$(OBJ2HEX) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex
 	
 install: all
-	sudo $(AVRDUDE) -c $(PROGRAMMER) -P "$(PORT)" -p $(MCU) -b 10000 -U flash:w:$(TARGET).hex
+	$(AVRDUDE) -c $(PROGRAMMER) -P "$(PORT)" -p $(MCU) -b 10000 -U flash:w:$(TARGET).hex
 	
 fuse:
-	sudo $(AVRDUDE) -c $(PROGRAMMER) -P "$(PORT)" -p $(MCU) -b 10000 -U hfuse:w:0xd9:m -U efuse:w:0x07:m
+	$(AVRDUDE) -c $(PROGRAMMER) -P "$(PORT)" -p $(MCU) -b 10000 -U hfuse:w:0xd9:m -U efuse:w:0x07:m
 
 clean:
 	rm -f *.hex *.obj *.elf $(BUILDDIR)/*.o

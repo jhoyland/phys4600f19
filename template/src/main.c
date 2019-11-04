@@ -7,7 +7,10 @@ uint8_t keep_going = 1;
 
 void loop()
 {
-
+	PORTD |= (1 << PD1);
+	_delay_ms(100);
+	PORTD &= ~(1 << PD1);
+	_delay_ms(100);
 }
 
 void setup()
