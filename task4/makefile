@@ -16,7 +16,7 @@ SOURCES   = $(wildcard $(SRCDIR)/*.c)
 #Make another list by replacing all the .c's from the sources list with .o's and change the directory to build
 OBJECTS   = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 #A list of all libraries to be used
-#LIBRARIES = m
+LIBRARIES = m
 
 #The gcc option to link an external libary is -l so prefix -l to each library in the list
 LIBCMD    = $(addprefix -l,$(LIBRARIES))
@@ -27,7 +27,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 
 #Link together the object files and libraries to create the final exectuable
 $(TARGET): $(OBJECTS)
-	$(CC) $(LFLAGS) $(LIBCMD) -o $@ $^
+	$(CC) $(LFLAGS) -o $@ $^ $(LIBCMD)
 
 
 
