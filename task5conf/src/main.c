@@ -22,7 +22,6 @@ void main(int argc, char** argv)
 
 	setvbuf(stdout, NULL, _IOLBF, 0);
 
-<<<<<<< HEAD
 	status = viOpenDefaultRM(&defaultRM);*/
 
 	printf("\nAttempting to open\0");
@@ -30,23 +29,10 @@ void main(int argc, char** argv)
 /*	if(status == VI_SUCCESS)
 	{
 
-=======
-
-
-	if(status == VI_SUCCESS)
-	{
-<<<<<<< HEAD
-		status = viFindRsrc(defaultRM,"USB[0-9]::0x0699?*INSTR",&resourceList,&num_inst,description);
-		if(status == VI_SUCCESS)
-		{
-			status = viOpen(defaultRM,description,VI_NULL,VI_NULL,&scopeHandle);
-=======
->>>>>>> 52dae5f5d7d0a5865c92d71e23b73b8dcbbc5aed
 		status = viFindRsrc(defaultRM,"USB[0-9]::?*INSTR",	&resourceList,&num_inst,description);
 		if(status == VI_SUCCESS)
 		{
 			status = viOpen(defaultRM,description,	VI_NULL,VI_NULL,&scopeHandle);
->>>>>>> 1f7d2a36932c8e4e73a683247a4afcc1915d63e3
 
 			if(status == VI_SUCCESS)
 			{
