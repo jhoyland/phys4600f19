@@ -15,14 +15,14 @@ void main(int argc, char** argv)
 
 	status = viOpenDefaultRM(&defaultRM);
 
+
+
 	if(status == VI_SUCCESS)
 	{
-		status = viFindRsrc(defaultRM,"USB[0-9]::*INSTR",
-						&resourceList,&num_inst,description);
+		status = viFindRsrc(defaultRM,"USB[0-9]::0x0699?*INSTR",&resourceList,&num_inst,description);
 		if(status == VI_SUCCESS)
 		{
-			status = viOpen(defaultRM,description,
-							VI_NULL,VI_NULL,&scopeHandle);
+			status = viOpen(defaultRM,description,VI_NULL,VI_NULL,&scopeHandle);
 
 			if(status == VI_SUCCESS)
 			{
